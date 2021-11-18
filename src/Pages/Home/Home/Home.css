@@ -1,0 +1,17 @@
+.header-text{
+    color: #f26529;
+}
+.header-btn{
+    background-color: #f26529;
+    color: antiquewhite;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+.width{
+    width: 100%;
+}
+.display-color{
+    text-decoration: none;
+    color: white;
+}
