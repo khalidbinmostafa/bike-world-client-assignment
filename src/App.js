@@ -45,12 +45,13 @@ function App() {
             <Route path="/register">
               <Register></Register>
             </Route>
-            <PrivateRoute path="/purchase">
-              <Purchase></Purchase>
-            </PrivateRoute>
             <PrivateRoute path="/purchase/:carId">
               <Purchase></Purchase>
             </PrivateRoute>
+            <PrivateRoute path="/purchase">
+              <Purchase></Purchase>
+            </PrivateRoute>
+
 
             <PrivateRoute path="/dashboard">
               <DashboardHome></DashboardHome>

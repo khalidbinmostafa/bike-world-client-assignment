@@ -57,21 +57,16 @@ const Purchase = () => {
                     <Row className="pb-5">
 
                         <div className="mt-3 mb-5">
-                            <h2 className="header-text">PURCHASE  INFORMATION</h2>
+                            <h2 className="header-text">PURCHASE INFORMATION</h2>
                         </div>
 
                         <Col xs={12} md={6} lg={6}>
                             <img src={findProduct?.img} className="img-fluid rounded-2" alt="" />
-                            <h1 className="text-danger mt-2">{findProduct?.description}</h1>
+
                         </Col>
                         <Col xs={12} md={6} lg={6} className="d-flex flex-column align-items-end justify-content-center">
-                            <h3 className="text-primary"> {findProduct?.name}</h3>
-                            <h3 className="text-primary">{findProduct?.model} MODEL</h3>
-                            <h3 className="text-primary"> {findProduct?.color} Variant</h3>
-                            <h3 className="text-primary">{findProduct?.fuel} Fuel System</h3>
-                            <h3 className="text-primary">{findProduct?.mile} CC</h3>
-                            <h3 className="text-primary"> {findProduct?.type} Bike</h3>
-                            <h3 className="text-primary">{findProduct?.price}</h3>
+                            <h3 className="text-primary"><span className="fw-bold" style={{ color: "black" }}>Bike Name:</span> {findProduct?.name}</h3>
+                            <h3 className="text-primary"><span className="fw-bold" style={{ color: "black" }}>Price :</span> {findProduct?.price}</h3>
                         </Col>
                     </Row>
                 </Container>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './ExploreDetails.css';
 
 const ExploreDetails = ({ product }) => {
-    const { id, name, img, price } = product;
+    const { _id, name, img, price } = product;
     console.log(product);
     return (
 
@@ -14,7 +14,7 @@ const ExploreDetails = ({ product }) => {
                 <div className="card-body">
                     <h5 className="card-title"><span className="fw-bold">Bike Name:</span> {name}</h5>
                     <h5 className="card-title"><span className="fw-bold">Price:</span> {price}</h5>
-                    <Link to={`/purchase/${id}`}>
+                    <Link to={`/purchase/${_id}`}>
                         <button className="header-btn">Purchase</button>
                     </Link>
                 </div>
