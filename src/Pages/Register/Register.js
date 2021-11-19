@@ -1,65 +1,48 @@
 import React from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 const Register = () => {
-    const {
-        user,
-        name,
-        googleSignIn,
-        handleName,
-        handleEmail,
-        handlePassword,
-        registerUser,
-        error,
-    } = useAuth();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const history = useHistory()
+
+    const { authError, registerUser } = useAuth()
+
+    const onSubmit = data => {
+        console.log(data.email, data.password, data.name)
+        registerUser(data.name, data.email, data.password, history)
+        reset(data)
+    };
     return (
         <Container>
-            <h1>Please Register </h1>
-            <Form onSubmit={registerUser}>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Your Name</Form.Label>
-                    <Form.Control
-                        onBlur={handleName}
-                        type="name"
-                        placeholder="Your Name"
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                        onBlur={handleEmail}
-                        type="email"
-                        placeholder="Enter email"
-                    />
-                    <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                    </Form.Text>
-                </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        onBlur={handlePassword}
-                        type="password"
-                        placeholder="Password"
-                    />
-                </Form.Group>
-            </Form>
+            <h2 className="header-text mt-4">PLEASE REGISTER</h2>
 
-            <Button onClick={registerUser} variant="primary" type="submit">
-                Sign Up
-            </Button>
-            <br />
-            <br />
-            <Button onClick={googleSignIn} variant="info" type="submit">
-                Google Sign In
-            </Button>
-            <div>
-                <Link to="/login">Already Register?</Link>
-            </div>
-            {!user?.displayName && <p className="text-danger">{error}</p>}
+            <form className="d-flex flex-column mt-5 justify-content-center mx-auto form-input" onSubmit={handleSubmit(onSubmit)}>
+
+                <input className="mb-3 bg-transparent text-dark border-0 border-bottom container-input" placeholder="Name" {...register("name", { required: true })} />
+
+                {errors.name && <span>This field is required</span>}
+
+                <input className="mb-3 bg-transparent text-dark border-0 border-bottom container-input" placeholder="Email" {...register("email", { required: true })} />
+
+                {errors.email && <span>This field is required</span>}
+
+                <input className="mb-3 bg-transparent text-dark border-0 border-bottom container-input" placeholder="Password" {...register("password", { required: true })} />
+
+                {errors.password && <span>This field is required</span>}
+
+                <input className="bg-primary border-0 text-white fs-5 w-25 rounded-3 mx-auto mt-3" type="submit" />
+            </form>
+
+            <h4 className="text-danger mt-4 mb-2">{authError}</h4>
+
+            <Link className="link-container" to='/login'>
+                <h4>Already Register?</h4>
+            </Link>
         </Container>
     );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import Reviews from '../Reviews/Reviews';
 import './Home.css';
 
 const Home1 = () => {
@@ -18,6 +19,7 @@ const Home1 = () => {
                     <p className="mt-3">More Services Coming Soon</p>
                 </div>
             </div>
+            <Reviews></Reviews>
         </></>
     );
 }

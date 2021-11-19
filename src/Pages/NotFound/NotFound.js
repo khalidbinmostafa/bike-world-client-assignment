@@ -1,12 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Footer = () => {
+const NotFound = () => {
     return (
-        <div>
-            <footer className="bg-black text-muted text-center mt-5"><span style={{ color: 'white' }} > © 2021 All Rights Reserved.</span><br /> <span style={{ color: 'white' }}>Developed By Khalid</span>
-            </footer>
+        <div className="text-center mb-5">
+            <img style={{ width: '100%' }} src="https://image.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg" alt="" />
+            <Link to="/"><button style={{ color: 'white' }} className="bg-danger">Go Back</button></Link>
         </div>
     );
 };
 
-export default Footer;
+export default NotFound;

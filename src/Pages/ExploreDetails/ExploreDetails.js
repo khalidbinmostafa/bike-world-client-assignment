@@ -1,11 +1,14 @@
 import React from 'react';
+import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import './Service.css';
+import './ExploreDetails.css';
 
-const Service = ({ service }) => {
-    const { id, name, img, price } = service;
+const ExploreDetails = ({ product }) => {
+    const { id, name, img, price } = product;
+    console.log(product);
     return (
-        <div className="col col-lg-4 col-sm-6">
+
+        <div className="col col-lg-4 col-s-12">
             <div className="card">
                 <img src={img} className="card-img-top" alt="..." />
                 <div className="card-body">
@@ -17,7 +20,8 @@ const Service = ({ service }) => {
                 </div>
             </div>
         </div>
+
     );
 };
 
-export default Service;
+export default ExploreDetails;

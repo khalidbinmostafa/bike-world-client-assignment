@@ -1,109 +1,134 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
-import { useEffect, useState } from "react";
-import initializeAuthentication from "../Login/Firebase/firebase.init";
+import { useEffect, useState } from 'react';
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile
+} from "firebase/auth";
 
-initializeAuthentication();
+import initializeAuthentication from './../Login/Firebase/firebase.init';
 
+
+initializeAuthentication()
 const useFirebase = () => {
-    const [user, setUser] = useState({});
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
 
-    const auth = getAuth();
+    const [user, setUser] = useState({})
+    const [isLoading, setIsLoading] = useState(true)
+    const [authError, setAuthError] = useState('')
+    const [admin, setAdmin] = useState([])
+    const auth = getAuth()
 
-    const googleSignIn = () => {
-        setIsLoading(true);
-        const googleProvider = new GoogleAuthProvider();
-        return signInWithPopup(auth, googleProvider)
-            .catch(error => {
-                const errorMessage = error.message;
-                console.log(error);
-                setError(errorMessage);
-            })
-            .finally(() => setIsLoading(false));
-    };
 
-    // create user  with email and password
-
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleName = e => {
-        setName(e.target.value);
-    };
-
-    const handleEmail = e => {
-        setEmail(e.target.value);
-    };
-
-    const handlePassword = e => {
-        setPassword(e.target.value);
-    };
-
-    const setUserName = () => {
-        updateProfile(auth.currentUser, { displayName: name }).then(() => { });
-    };
-
-    const registerUser = () => {
-        setIsLoading(true);
+    // register an user
+    const registerUser = (name, email, password, history) => {
+        setIsLoading(true)
         createUserWithEmailAndPassword(auth, email, password)
-            .then(result => {
-                const user = result.user;
-                setUser(user);
-                setUserName();
-                console.log(user);
+            .then((result) => {
+                console.log(result.user)
+                const newUser = { email, displayName: name }
+                setUser(newUser)
+
+                // save user to database
+                saveUser(email, name)
+
+                // send name to firebase after creation
+
+                updateProfile(auth.currentUser, {
+                    displayName: name
+                }).then(() => {
+                }).catch((error) => {
+                });
+                setAuthError('')
+                history.push('/')
+            })
+            .catch((error) => {
+                console.log(error.message);
+                setAuthError(error.message)
+
             })
             .finally(() => setIsLoading(false));
-    };
+    }
 
-    const signInWithEmailPassword = () => {
+
+    // login the user
+    const signInUser = (email, password, location, history) => {
         signInWithEmailAndPassword(auth, email, password)
-            .then(result => {
-                const user = result.user;
+            .then((result) => {
+                const destination = location?.state?.from || '/';
+                history.replace(destination);
 
-                setUser(user);
+                setUser(result.user)
+                setAuthError('')
+
             })
-            .catch(error => {
-                const errorMessage = error.message;
-                console.log(errorMessage);
-                setError(errorMessage);
+            .catch((error) => {
+                console.log(error)
+                setAuthError(error)
             });
-    };
+    }
+
+    // currently signed in user
     useEffect(() => {
-        onAuthStateChanged(auth, user => {
+        onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
             } else {
-                setUser({});
+                setUser({})
             }
-            setIsLoading(false);
+            setIsLoading(false)
         });
-    }, []);
+    }, [])
 
-    // google sign out
-    const userSignOut = () => {
-        signOut(auth)
-            .then(() => {
-                setUser({});
-            })
+    // sign Out user
+    const signOutUser = () => {
+        setIsLoading(true)
+        signOut(auth).then(() => {
+
+        }).catch((error) => {
+
+        })
             .finally(() => setIsLoading(false));
-    };
+    }
 
+    console.log(user?.email)
+    // check admin
+    useEffect(() => {
+        fetch(`https://enigmatic-wildwood-60336.herokuapp.com/users/admin/${user.email}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data.admin)
+                setAdmin(data.admin)
+            })
+    }, [user.email])
+
+    // save users to database
+    const saveUser = (email, displayName) => {
+        const user = { email, displayName }
+        fetch('https://enigmatic-wildwood-60336.herokuapp.com/signed/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+            })
+
+    }
     return {
         user,
-        error,
-        name,
-        handleName,
-        userSignOut,
-        handleEmail,
-        handlePassword,
+        authError,
         registerUser,
-        error,
-        signInWithEmailPassword,
-        googleSignIn,
+        signInUser,
         isLoading,
-    };
-};
+        signOutUser,
+        admin
+    }
+
+}
 
 export default useFirebase;

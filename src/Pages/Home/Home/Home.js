@@ -7,20 +7,21 @@ import './Home.css';
 
 
 const Home = () => {
-    const { user, userSignOut } = useAuth();
+    const { user, signOutUser } = useAuth();
     return (
         <><div className="mb-3">
             <Nav className="sticky-top navbar navbar-dark bg-dark navbar-expand-lg navbar-light bg-light">
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="/home">Home</Link>
-                    <Link className="navbar-brand" to="/service/:serviceId">Purchase</Link>
+                    <Link className="navbar-brand" to="/dashboard">Dashboard</Link>
+                    <Link className="navbar-brand" to="/explore">Explore</Link>
                     <Navbar.Text className="text-white mx-5">
                         <span className="text-info">Signed in as: </span>
                         {user?.displayName}
                     </Navbar.Text>
 
-                    {user?.displayName ? (
-                        <Button onClick={userSignOut} variant="info" type="submit">
+                    {user.displayName ? (
+                        <Button onClick={signOutUser} variant="info" type="submit">
                             LOGOUT
                         </Button>
                     ) : (

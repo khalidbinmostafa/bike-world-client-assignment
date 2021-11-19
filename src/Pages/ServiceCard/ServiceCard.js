@@ -3,8 +3,10 @@ import Service from '../Service/Service';
 
 const ServiceCard = () => {
     const [services, setServices] = useState([]);
+    const [page, setPage] = useState('home')
+    const size = 6;
     useEffect(() => {
-        fetch('./bikeWorld.json')
+        fetch(`https://enigmatic-wildwood-60336.herokuapp.com/products?page=${page}&&size=${size}`)
             .then(res => res.json())
             .then(data => setServices(data));
     }, []);
